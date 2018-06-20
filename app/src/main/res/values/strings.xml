@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Stampy</string>
+
+    <!-- Strings related to login -->
+    <string name="loginSuccessful">Successfully logged in</string>
+    <string name="loginFailed">Login failed, please check your Internet connection and try again</string>
+    <string name="logout">Logout</string>
+    <string name="logoutSuccessful">Successfully Logged-Out</string>
+
+    <!-- Strings related to scanning a new -->
+    <string name="scan">Scan a new Code</string>
+    <string name="scanCanceled">You canceled the scan</string>
+    <string name="stampSuccessful">Successfully added Stamp</string>
+
 </resources>
