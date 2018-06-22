@@ -11,5 +11,15 @@
     <string name="scan">Scan a new Code</string>
     <string name="scanCanceled">You canceled the scan</string>
     <string name="stampSuccessful">Successfully added Stamp</string>
+    <string name="stampUnsuccessful">This code is not valid</string>
+
+    <!-- Strings related to generating a new vaucher -->
+    <string name="generateVoucher">Generate new voucher</string>
+    <string name="viewVoucher">View all vouchers</string>
+    <string name="notEnoughStamps">You currently don\'t have enough stamps</string>
+    <string name="voucherSuccessful">Successfully created voucher</string>
+
+    <string name="stamp">STAMP</string>
+    <string name="stamps">STAMPS</string>
 
 </resources>

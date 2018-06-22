@@ -29,8 +29,13 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:11.8.0'
     implementation 'com.google.firebase:firebase-auth:11.8.0'
     implementation "com.google.android.gms:play-services-gcm:11.8.0"
+    //implementation 'com.google.firebase:firebase-core:16.0.0'
     implementation "com.google.zxing:core:3.2.1"
     implementation "com.journeyapps:zxing-android-embedded:3.2.0@aar"
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
+
+//SHA1 E4:DB:EE:CA:11:06:94:E4:F9:20:C0:47:61:5F:E3:FA:A6:AD:A1:13
+

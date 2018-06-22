@@ -3,11 +3,15 @@ package com.example.zioerjens.stampy;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Stamp {
+public class FreeStamp {
 
     public String dateTime;
+    public String code;
 
-    public Stamp() {
+    public FreeStamp(String code) {
         this.dateTime = new SimpleDateFormat("dd-MM-yyyy  HH:mm:ss").format(new Date());
+        this.code = code;
     }
+
+    public FreeStamp(){}
 }
