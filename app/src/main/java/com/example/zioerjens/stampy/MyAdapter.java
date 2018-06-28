@@ -16,7 +16,7 @@ import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private List<Vaucher> mDataset;
-    private VoucherView voucherView;
+    private VoucherViewFragment voucherView;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -41,13 +41,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         @Override
         public void onClick(View v) {
+            voucherView.setClickCounter(voucherView.getClickCounter() + 1);
             voucherView.createPopUp(mItem.code);
             Log.e("LOG","Click");
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(List<Vaucher> myDataset, VoucherView voucherView) {
+    public MyAdapter(List<Vaucher> myDataset, VoucherViewFragment voucherView) {
         this.voucherView = voucherView;
         mDataset = myDataset;
     }

@@ -1,20 +1,21 @@
 package com.example.zioerjens.stampy;
 
-import android.app.ProgressDialog;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Marker;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,36 +29,49 @@ import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class VoucherView extends AppCompatActivity {
+public class VoucherViewFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private VoucherView voucherView;
+    private VoucherViewFragment voucherView;
     private ProgressBar pb;
     private int clickCounter;
+    private Activity context;
+    private View view;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_voucher_view);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_voucher_view, container, false);
+        return rootView;
+    }
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        context = (Activity) getContext();
+        view = getView();
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(context);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         this.voucherView = this;
 
-        this.pb = findViewById(R.id.indeterminateBar);
-        getVouchersFromUser();
+        this.pb = view.findViewById(R.id.indeterminateBar);
+        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+            getVouchersFromUser();
+        }
     }
 
     public void getVouchersFromUser(){
@@ -84,7 +98,7 @@ public class VoucherView extends AppCompatActivity {
                 }
 
                 // specify an adapter (see also next example)
-                //mAdapter = new MyAdapter(vauchers,voucherView);
+                mAdapter = new MyAdapter(vauchers,voucherView);
                 mRecyclerView.setAdapter(mAdapter);
                 pb.setVisibility(ProgressBar.GONE);
             }
@@ -97,8 +111,8 @@ public class VoucherView extends AppCompatActivity {
     public void createPopUp(String code){
 
         if (clickCounter == 1) {
-            AlertDialog.Builder mBuilder = new AlertDialog.Builder(voucherView);
-            View mView = getLayoutInflater().inflate(R.layout.show_code, null);
+            AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
+            View mView = context.getLayoutInflater().inflate(R.layout.show_code, null);
             final ImageView codeImg = (ImageView) mView.findViewById(R.id.qrCode);
 
             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();

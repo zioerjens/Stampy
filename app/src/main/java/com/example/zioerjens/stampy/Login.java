@@ -81,7 +81,7 @@ public class Login extends AppCompatActivity {
             Toast.makeText(this,R.string.loginSuccessful, Toast.LENGTH_SHORT).show();
 
             //Change to the Home-Screen
-            Intent intent = new Intent(getApplicationContext(),Home.class);
+            Intent intent = new Intent(getApplicationContext(),Main.class);
             startActivity(intent);
             finish();
         }
