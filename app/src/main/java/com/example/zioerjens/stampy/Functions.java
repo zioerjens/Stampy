@@ -3,6 +3,13 @@ package com.example.zioerjens.stampy;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
+import android.util.Log;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Locale;
 
 public class Functions {
 
@@ -29,5 +36,28 @@ public class Functions {
         DisplayMetrics metrics = resources.getDisplayMetrics();
         float px = dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
         return px;
+    }
+
+    public static Boolean isYoungerThanSec(String dateTime, int seconds){
+
+        DateFormat format = new SimpleDateFormat("dd-MM-yyyy  HH:mm:ss", Locale.ENGLISH);
+        Date date = new Date();
+        try {
+            date = format.parse(dateTime);
+        } catch (Exception e){
+            Log.e("isYoungerThanSec","String could not be converted to Date");
+            return false;
+        }
+
+        Date later = new Date(date.getTime()+(seconds * 1000));
+
+        Date now = new Date();
+
+        if (now.after(later)){
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 }

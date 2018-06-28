@@ -42,6 +42,7 @@ public class Home extends AppCompatActivity {
 
     private Boolean valid = false;
     private Home activity;
+    private Intent mapsIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +86,8 @@ public class Home extends AppCompatActivity {
             }
         });
         countStamps();
+        mapsIntent = new Intent(getApplicationContext(),MapsActivity.class);
+        setSwipeListners();
     }
 
     //Adds the OnClickListener to the ScannerButton
@@ -184,12 +187,14 @@ public class Home extends AppCompatActivity {
 
                     if (freeStamp.code.equals(scannedCode)){
 
-                        //TODO check if code is older that 10 Minutes
+                        //Checking if the Stamp is older than 10 Minutes
+                        if (Functions.isYoungerThanSec(freeStamp.dateTime,600)) {
 
-                        String key = grSnapshot.getKey();
-                        deleteFreeStamp(key,scannedCode);
-                        valid = true;
-                        break;
+                            String key = grSnapshot.getKey();
+                            deleteFreeStamp(key, scannedCode);
+                            valid = true;
+                            break;
+                        }
                     }
                 }
                 if (!valid){
@@ -374,5 +379,17 @@ public class Home extends AppCompatActivity {
             textView.setPadding(0,(int)Functions.convertDpToPixel(65f,this),0,0);
             textView.setHeight((int)Functions.convertDpToPixel(100f,this));
         }
+    }
+
+    public void setSwipeListners(){
+        findViewById(R.id.window).setOnTouchListener(new OnSwipeTouchListener(this) {
+
+            public void onSwipeLeft() {
+
+                mapsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(mapsIntent);
+            }
+
+        });
     }
 }
