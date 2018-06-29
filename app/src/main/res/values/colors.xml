@@ -7,4 +7,8 @@
     <color name="textColor">#FFFFFF</color>
     <color name="gray">#CCCCCC</color>
     <color name="transparentDark">#44000000</color>
+    <color name="transparentDarker">#99000000</color>
+    <color name="listBackground">#FFCCCCCC</color>
+    <color name="listForeground">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
 </resources>

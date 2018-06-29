@@ -1,17 +1,29 @@
 package com.example.zioerjens.stampy;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Functions {
+
+    final static int SUCCESS = 0;
+    final static int FAILURE = 1;
 
     public static String generateNewCode(int length){
 
@@ -50,7 +62,6 @@ public class Functions {
         }
 
         Date later = new Date(date.getTime()+(seconds * 1000));
-
         Date now = new Date();
 
         if (now.after(later)){
@@ -59,5 +70,48 @@ public class Functions {
         else {
             return true;
         }
+    }
+
+    public static void showValidPopUp(final Activity activity, final int messageId) {
+
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(activity);
+        View mView = activity.getLayoutInflater().inflate(R.layout.show_success, null);
+        TextView title = (TextView) mView.findViewById(R.id.successTitle);
+
+        switch (messageId) {
+            case 0:
+                mView.findViewById(R.id.success).setBackgroundResource(R.drawable.success);
+                title.setText(R.string.stampSuccessful);
+                break;
+            case 1:
+                mView.findViewById(R.id.success).setBackgroundResource(R.drawable.failure);
+                title.setText(R.string.stampUnsuccessful);
+                break;
+        }
+
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setCancelable(false);
+        dialog.show();
+
+        new CountDownTimer(3000, 1000) { // 5000 = 5 sec
+
+            public void onTick(long millisUntilFinished) {
+            }
+
+            public void onFinish() {
+
+                dialog.dismiss();
+
+            }
+        }.start();
+    }
+
+    public static Boolean hasInternetConnection(Activity activity){
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

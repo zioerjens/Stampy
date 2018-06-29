@@ -2,18 +2,54 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/date"
+    android:orientation="vertical"
+    >
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:textSize="16dp"
-        android:textStyle="bold"
-        android:height="60dp"/>
+        android:orientation="horizontal"
+        android:background="@color/listForeground"
+        android:layout_margin="5dp"
+        android:padding="5dp"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:height="30dp"
+                android:text="@string/dateText"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:height="30dp"
+                android:textColor="@color/black"
+                />
+        </LinearLayout>
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="end|center_vertical"
+                android:background="@drawable/qr"
+                android:layout_marginRight="5dp"/>
+        </FrameLayout>
+    </LinearLayout>
 </RelativeLayout>

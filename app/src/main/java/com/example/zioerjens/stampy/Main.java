@@ -1,5 +1,7 @@
 package com.example.zioerjens.stampy;
 
+import android.app.Activity;
+import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +20,12 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class Main extends AppCompatActivity {
+
+    private Main activity;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -33,7 +40,7 @@ public class Main extends AppCompatActivity {
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
+    private CustomViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +52,12 @@ public class Main extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (CustomViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setCurrentItem(1);
+        activity = this;
+        CheckForInternet cfi = new CheckForInternet(activity);
+        cfi.execute();
     }
 
 
@@ -157,5 +167,9 @@ public class Main extends AppCompatActivity {
             getFragmentManager().popBackStack();
         }
 
+    }
+
+    public CustomViewPager getmViewPager() {
+        return mViewPager;
     }
 }

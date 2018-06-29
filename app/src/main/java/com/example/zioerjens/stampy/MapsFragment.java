@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -36,8 +38,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,GoogleM
     private Activity context;
     private ViewPager viewPager;
     private GoogleMap mMap;
-    private Map<Marker,Integer> markerList;
-    private List<MarkerData> markerData;
+    private Map<Marker,Integer> markerList = new HashMap<Marker,Integer>();
+    private List<MarkerData> markerData = new ArrayList<MarkerData>();
+    private Boolean firstGet = true;
     AlertDialog dialog;
 
     public MapsFragment(){}
@@ -45,14 +48,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,GoogleM
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_maps, container, false);//TODO create fragment maps, edit main.java...
-        //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-        //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        View rootView = inflater.inflate(R.layout.activity_maps, container, false);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        markerList = new HashMap<Marker,Integer>();
-        markerData = new ArrayList<MarkerData>();
         context = (Activity) getContext();
         return rootView;
     }
@@ -78,7 +76,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,GoogleM
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        getMarkers();
+        if (firstGet) {
+            getMarkers();
+        }
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(46.80111111111111,8.226666666666667)));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(7));
@@ -88,13 +88,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,GoogleM
     @Override
     public void onInfoWindowClick(Marker marker) {
 
+        Iterator it = markerList.entrySet().iterator();
         createShopPopUp(markerList.get(marker));
     }
 
     public void createShopPopUp(Integer key){
 
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
-        View mView = getLayoutInflater().inflate(R.layout.shop_info,null);
+        View mView = getLayoutInflater().inflate(R.layout.shop_info, null);
         TextView name = mView.findViewById(R.id.name);
         name.setText(markerData.get(key).name);
         TextView content = mView.findViewById(R.id.content);
@@ -111,7 +112,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,GoogleM
         dialog.show();
     }
 
-    public void getMarkers(){
+    public void getMarkers(){ //TODO gets called after doing something in another fragment -> provides error
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference ref = db.getReference("shop");
 
@@ -138,6 +139,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,GoogleM
             LatLng coords = new LatLng(Double.parseDouble(markerData.get(i).latitude), Double.parseDouble(markerData.get(i).longitude));
             markerList.put(mMap.addMarker(new MarkerOptions().position(coords).title(markerData.get(i).name)), i);
         }
+
+        firstGet = false;
     }
 
     public void setViewPager(ViewPager viewPager){

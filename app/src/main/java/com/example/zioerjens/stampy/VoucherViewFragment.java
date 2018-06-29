@@ -14,8 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.Marker;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,7 +27,6 @@ import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class VoucherViewFragment extends Fragment {
@@ -42,6 +39,7 @@ public class VoucherViewFragment extends Fragment {
     private int clickCounter;
     private Activity context;
     private View view;
+    AlertDialog dialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -124,8 +122,14 @@ public class VoucherViewFragment extends Fragment {
             } catch (WriterException e) {
                 e.printStackTrace();
             }
+            mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
             mBuilder.setView(mView);
-            final AlertDialog dialog = mBuilder.create();
+            dialog = mBuilder.create();
             dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {

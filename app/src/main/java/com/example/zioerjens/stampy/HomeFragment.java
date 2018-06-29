@@ -13,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +38,9 @@ public class HomeFragment extends Fragment {
     private Activity context;
     private Boolean valid = false;
     private Fragment fragment;
+    private RelativeLayout loadingScreen;
+    private boolean loaded = false;
+    private Main main;
 
     public HomeFragment(){}
 
@@ -44,6 +49,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_home, container, false);
         context = (Activity) getContext();
+        main = (Main) getActivity();
         fragment = this;
         return rootView;
     }
@@ -65,6 +71,12 @@ public class HomeFragment extends Fragment {
         checkLoggedIn();
         this.view = getView();
 
+        if (!loaded) {
+            loadingScreen = view.findViewById(R.id.loadingScreen);
+            loadingScreen.setVisibility(View.VISIBLE);
+            main.getmViewPager().disableScroll(true);
+        }
+
         final Button buttonLogout = view.findViewById(R.id.btnLogout);
         buttonLogout.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -77,8 +89,7 @@ public class HomeFragment extends Fragment {
         btnViewVoucher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context,VoucherView.class);
-                startActivity(intent);
+            //TODO show selection of shops
             }
         });
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
@@ -194,7 +205,7 @@ public class HomeFragment extends Fragment {
                     }
                 }
                 if (!valid){
-                    showValidPopUp(false);
+                    Functions.showValidPopUp(getActivity(),Functions.FAILURE);
                 }
             }
 
@@ -210,7 +221,8 @@ public class HomeFragment extends Fragment {
         ref.child(key).removeValue();
 
         addStamp(code);
-        showValidPopUp(true);
+        Functions.showValidPopUp(getActivity(),Functions.SUCCESS);
+
         countStamps();
     }
 
@@ -296,7 +308,7 @@ public class HomeFragment extends Fragment {
         Toast.makeText(context,R.string.voucherSuccessful,Toast.LENGTH_LONG).show();
     }
 
-    public void showValidPopUp(Boolean valid){
+    /*public void showValidPopUp(Boolean valid){
 
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
         View mView = getLayoutInflater().inflate(R.layout.show_success,null);
@@ -317,7 +329,7 @@ public class HomeFragment extends Fragment {
         dialog.setCancelable(false);
         dialog.show();
 
-        new CountDownTimer(5000, 1000) { // 5000 = 5 sec
+        new CountDownTimer(3000, 1000) { // 5000 = 5 sec
 
             public void onTick(long millisUntilFinished) {}
 
@@ -326,7 +338,7 @@ public class HomeFragment extends Fragment {
             }
         }.start();
     }
-
+*/
     public void countStamps(){
         final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -375,5 +387,8 @@ public class HomeFragment extends Fragment {
             textView.setPadding(0,(int)Functions.convertDpToPixel(65f,context),0,0);
             textView.setHeight((int)Functions.convertDpToPixel(100f,context));
         }
+        loadingScreen.setVisibility(View.GONE);
+        loaded = true;
+        main.getmViewPager().disableScroll(false);
     }
 }
