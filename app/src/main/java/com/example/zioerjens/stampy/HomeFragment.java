@@ -139,7 +139,7 @@ public class HomeFragment extends Fragment {
     //Adds the OnClickListener to the ScannerButton
     public void addScannerOnclick(){
         final Activity activity = context;
-        final Button btnScanner = view.findViewById(R.id.btnScan);
+        final LinearLayout btnScanner = view.findViewById(R.id.btnScan);
         btnScanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,6 +159,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
+        view.findViewById(R.id.loadingStampResult).setVisibility(View.VISIBLE);
 
         if (result != null){
             //Happens if you cancel the scanning
@@ -205,6 +206,7 @@ public class HomeFragment extends Fragment {
                     }
                 }
                 if (!valid){
+                    view.findViewById(R.id.loadingStampResult).setVisibility(View.GONE);
                     Functions.showValidPopUp(getActivity(),Functions.FAILURE);
                 }
             }
@@ -219,8 +221,8 @@ public class HomeFragment extends Fragment {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference ref = db.getReference("freeStamp");
         ref.child(key).removeValue();
-
         addStamp(code);
+        view.findViewById(R.id.loadingStampResult).setVisibility(View.GONE);
         Functions.showValidPopUp(getActivity(),Functions.SUCCESS);
 
         countStamps();
@@ -232,6 +234,8 @@ public class HomeFragment extends Fragment {
         btnGenerateVaucher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                view.findViewById(R.id.loadingStampResult).setVisibility(View.VISIBLE);
 
                 final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -249,6 +253,7 @@ public class HomeFragment extends Fragment {
                                     deleteStamps();
                                 } else {
                                     Toast.makeText(context, "You currently don't have enough stamps", Toast.LENGTH_LONG).show();
+                                    view.findViewById(R.id.loadingStampResult).setVisibility(View.GONE);
                                 }
                             } else {
                                 Toast.makeText(context, "You currently don't have enough stamps", Toast.LENGTH_LONG).show();
@@ -308,37 +313,6 @@ public class HomeFragment extends Fragment {
         Toast.makeText(context,R.string.voucherSuccessful,Toast.LENGTH_LONG).show();
     }
 
-    /*public void showValidPopUp(Boolean valid){
-
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
-        View mView = getLayoutInflater().inflate(R.layout.show_success,null);
-
-        if (valid) {
-            mView.findViewById(R.id.success).setBackgroundResource(R.drawable.success);
-            TextView title = (TextView) mView.findViewById(R.id.successTitle);
-            title.setText(R.string.stampSuccessful);
-        } else {
-            mView.findViewById(R.id.success).setBackgroundResource(R.drawable.failure);
-            TextView title = (TextView) mView.findViewById(R.id.successTitle);
-            title.setText(R.string.stampUnsuccessful);
-        }
-
-        mBuilder.setView(mView);
-        final AlertDialog dialog = mBuilder.create();
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.setCancelable(false);
-        dialog.show();
-
-        new CountDownTimer(3000, 1000) { // 5000 = 5 sec
-
-            public void onTick(long millisUntilFinished) {}
-
-            public void onFinish() {
-                dialog.dismiss();
-            }
-        }.start();
-    }
-*/
     public void countStamps(){
         final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -387,6 +361,7 @@ public class HomeFragment extends Fragment {
             textView.setPadding(0,(int)Functions.convertDpToPixel(65f,context),0,0);
             textView.setHeight((int)Functions.convertDpToPixel(100f,context));
         }
+        view.findViewById(R.id.loadingStampResult).setVisibility(View.GONE);
         loadingScreen.setVisibility(View.GONE);
         loaded = true;
         main.getmViewPager().disableScroll(false);

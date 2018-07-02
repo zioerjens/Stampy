@@ -1,10 +1,18 @@
 package com.example.zioerjens.stampy;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -31,6 +39,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import static android.content.Context.LOCATION_SERVICE;
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback,GoogleMap.OnInfoWindowClickListener {
 
@@ -80,8 +90,21 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,GoogleM
             getMarkers();
         }
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(46.80111111111111,8.226666666666667)));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(7));
+        Location location = null;
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
+        }
+        if (ContextCompat.checkSelfPermission(context,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            location = getLocation();
+        }
+        if (location != null) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
+        } else {
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(46.80111111111111, 8.226666666666667)));
+        }
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(13));
         mMap.setOnInfoWindowClickListener(this);
     }
 
@@ -145,5 +168,19 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,GoogleM
 
     public void setViewPager(ViewPager viewPager){
         this.viewPager = viewPager;
+    }
+
+    public Location getLocation(){
+
+            LocationManager locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
+            Location location = null;
+            Criteria criteria = new Criteria();
+            String best = locationManager.getBestProvider(criteria, false);
+        try {
+            location = locationManager.getLastKnownLocation(best);
+            return location;
+        } catch (SecurityException e){
+            return null;
+        }
     }
 }

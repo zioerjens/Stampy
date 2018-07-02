@@ -8,18 +8,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:background="@color/transparentDarker">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/successTitle"
             android:textColor="@color/white"
+            android:gravity="center"
             android:layout_gravity="center"
             android:textSize="16dp"
             android:layout_marginBottom="4dp"/>
         <ImageView
             android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
             android:layout_gravity="center"
             android:background="@null"
             android:id="@+id/success"

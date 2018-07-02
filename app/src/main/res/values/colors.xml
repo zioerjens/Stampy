@@ -11,4 +11,5 @@
     <color name="listBackground">#FFCCCCCC</color>
     <color name="listForeground">#FFFFFFFF</color>
     <color name="black">#FF000000</color>
+    <color name="transparent">#00000000</color>
 </resources>

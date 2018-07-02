@@ -8,11 +8,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -35,7 +37,7 @@ public class VoucherViewFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private VoucherViewFragment voucherView;
-    private ProgressBar pb;
+    private RelativeLayout progressBar;
     private int clickCounter;
     private Activity context;
     private View view;
@@ -66,7 +68,7 @@ public class VoucherViewFragment extends Fragment {
 
         this.voucherView = this;
 
-        this.pb = view.findViewById(R.id.indeterminateBar);
+        this.progressBar = view.findViewById(R.id.indeterminateBar);
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
             getVouchersFromUser();
         }
@@ -74,13 +76,13 @@ public class VoucherViewFragment extends Fragment {
 
     public void getVouchersFromUser(){
 
-        pb.setVisibility(ProgressBar.VISIBLE);
+        progressBar.setVisibility(ProgressBar.VISIBLE);
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference ref = db.getReference("voucher");
         final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         final List<Vaucher> vauchers = new ArrayList<Vaucher>();
 
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -98,7 +100,12 @@ public class VoucherViewFragment extends Fragment {
                 // specify an adapter (see also next example)
                 mAdapter = new MyAdapter(vauchers,voucherView);
                 mRecyclerView.setAdapter(mAdapter);
-                pb.setVisibility(ProgressBar.GONE);
+                progressBar.setVisibility(ProgressBar.GONE);
+                if (vauchers.size() == 0){
+                    view.findViewById(R.id.noVouchers).setVisibility(View.VISIBLE);
+                } else {
+                    view.findViewById(R.id.noVouchers).setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -108,14 +115,17 @@ public class VoucherViewFragment extends Fragment {
 
     public void createPopUp(String code){
 
+        progressBar.setVisibility(View.VISIBLE);
+
         if (clickCounter == 1) {
+            Log.e("CLICK", "CLICK");
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
             View mView = context.getLayoutInflater().inflate(R.layout.show_code, null);
             final ImageView codeImg = (ImageView) mView.findViewById(R.id.qrCode);
 
             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
             try {
-                BitMatrix bitMatrix = multiFormatWriter.encode(code, BarcodeFormat.QR_CODE, 1000, 1000);
+                BitMatrix bitMatrix = multiFormatWriter.encode(code, BarcodeFormat.QR_CODE, 200, 200);
                 BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                 Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
                 codeImg.setImageBitmap(bitmap);
@@ -137,6 +147,7 @@ public class VoucherViewFragment extends Fragment {
                     clickCounter = 0;
                 }
             });
+            dialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
             dialog.show();
         }
     }

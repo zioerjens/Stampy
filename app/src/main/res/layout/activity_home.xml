@@ -7,20 +7,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".Home"
-        android:paddingTop="10dp"
+        android:paddingTop="25dp"
         android:id="@+id/window"
         android:orientation="vertical">
-        <Button
+        <LinearLayout
             android:id="@+id/btnScan"
             android:layout_width="300dp"
             android:layout_height="150dp"
             android:background="@color/colorPrimary"
             android:layout_margin="4dp"
-            android:text="@string/scan"
             android:layout_gravity="center"
-            android:textColor="@color/textColor"
-            android:textSize="18dp">
-        </Button>
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textColor"
+                android:textSize="18dp"
+                android:text="@string/scan"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_gravity="center"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/scan_white"
+                android:layout_marginBottom="15dp"/>
+        </LinearLayout>
         <FrameLayout
             android:layout_width="250dp"
             android:layout_height="250dp"
@@ -104,7 +116,7 @@
                 android:layout_height="50dp"
                 android:background="@color/colorPrimaryDark"
                 android:layout_margin="4dp"
-                android:text="@string/viewVoucher"
+                android:text="@string/selectShop"
                 android:layout_gravity="center"
                 android:textColor="@color/textColor">
             </Button>
@@ -147,5 +159,23 @@
                 android:layout_gravity="center"
                 />
         </LinearLayout>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/loadingStampResult"
+        android:visibility="gone"
+        android:background="@color/transparentDark"
+        android:clickable="true"
+        android:focusable="true">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </RelativeLayout>
     </RelativeLayout>
 </FrameLayout>

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Stampy</string>
+    <string name="title_activity_main">Stampy</string>
 
     <!-- Strings related to login -->
     <string name="loginSuccessful">Successfully logged in</string>
@@ -8,25 +9,25 @@
     <string name="logoutSuccessful">Successfully Logged-Out</string>
 
     <!-- Strings related to scanning a new code-->
-    <string name="scan">Scan a new Code</string>
+    <string name="scan">SCAN A NEW CODE</string>
     <string name="scanCanceled">You canceled the scan</string>
     <string name="stampSuccessful">Successfully added Stamp</string>
     <string name="stampUnsuccessful">This code is not valid</string>
 
     <!-- Strings related to generating a new voucher -->
     <string name="generateVoucher">Generate new voucher</string>
-    <string name="viewVoucher">View all vouchers</string>
+    <string name="selectShop">select shop</string>
     <string name="notEnoughStamps">You currently don\'t have enough stamps</string>
     <string name="voucherSuccessful">Successfully created voucher</string>
 
     <!-- Strings related to displaying the vouchers -->
     <string name="dateText">Voucher creation date:</string>
+    <string name="noVouchers">You currently don\'t own any vouchers.</string>
 
     <!-- General strings -->
     <string name="stamp">STAMP</string>
     <string name="stamps">STAMPS</string>
     <string name="title_activity_maps">Map</string>
-    <string name="title_activity_main">Main</string>
     <string name="action_settings">Settings</string>
     <string name="no_internet_connectivity">You are not connected to the internet.\nPlease set up a new connection.</string>
     <string name="loading_text">Getting all your stampy stamps…</string>

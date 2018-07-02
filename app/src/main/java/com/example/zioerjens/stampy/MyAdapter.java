@@ -43,7 +43,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         public void onClick(View v) {
             voucherView.setClickCounter(voucherView.getClickCounter() + 1);
             voucherView.createPopUp(mItem.code);
-            Log.e("LOG","Click");
         }
     }
 

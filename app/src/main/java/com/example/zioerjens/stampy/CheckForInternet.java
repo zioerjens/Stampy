@@ -51,7 +51,7 @@ public class CheckForInternet extends AsyncTask<String,String,String> {
         activity.runOnUiThread(new Runnable() {
             public void run() {
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(activity);
-                View mView = activity.getLayoutInflater().inflate(R.layout.show_success, null);
+                View mView = activity.getLayoutInflater().inflate(R.layout.show_internet_connectivity, null);
                 TextView title = (TextView) mView.findViewById(R.id.successTitle);
                 mView.findViewById(R.id.success).setBackgroundResource(R.drawable.no_internet_connectivity);
                 title.setText(R.string.no_internet_connectivity);
@@ -67,6 +67,4 @@ public class CheckForInternet extends AsyncTask<String,String,String> {
     public void dismissInternetConnectionPopUp(){
         dialog.dismiss();
     }
-
-
 }
